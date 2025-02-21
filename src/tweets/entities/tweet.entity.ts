@@ -17,5 +17,5 @@ export class Tweet {
 
     @ManyToOne(()=>User,(user)=>user.tweets,{onDelete:'CASCADE',eager:true})
     @JoinColumn({name:'user_id'})
-   user: User
+   user: User[]
 }

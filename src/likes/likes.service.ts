@@ -1,26 +1,57 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLikeDto } from './dto/create-like.dto';
 import { UpdateLikeDto } from './dto/update-like.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Like } from './entities/like.entity';
+import { Repository } from 'typeorm';
+import { TweetsService } from 'src/tweets/tweets.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class LikesService {
-  create(createLikeDto: CreateLikeDto) {
-    return 'This action adds a new like';
-  }
+  constructor(
+    @InjectRepository(Like)
+    private likeRepository: Repository<Like>,
+    private readonly tweetService: TweetsService,
+    private userservice: UsersService,
+  ) { }
+  async create(createLikeDto: CreateLikeDto) {
+    await this.tweetService.findOne(createLikeDto.tweet_id)
+    await this.userservice.findOne(createLikeDto.user_id)
+    const like = this.likeRepository.create({
+      user_id: createLikeDto.user_id,
+      tweet_id: createLikeDto.tweet_id
+    });
+    return await this.likeRepository.save(like);
+  };
+
+
 
   findAll() {
-    return `This action returns all likes`;
+    return this.likeRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} like`;
+    const like = this.likeRepository.findOne({ where: { id } })
+    if (!like) {
+      throw new NotFoundException('Like not found')
+    }
+    return like;
   }
 
-  update(id: number, updateLikeDto: UpdateLikeDto) {
-    return `This action updates a #${id} like`;
-  }
+  // update(id: number, updateLikeDto: UpdateLikeDto) {
+  //   return `This action updates a #${id} like`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} like`;
+  async remove(id: number) {
+    await this.findOne(id)
+    const result = await this.likeRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException('Like not found');
+    }
+    return {
+      message: 'Like deleted successfully.',
+      statusCode: HttpStatus.OK,
+    };
   }
 }

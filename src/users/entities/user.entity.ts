@@ -1,3 +1,4 @@
+import { Like } from "src/likes/entities/like.entity";
 import { Profile } from "src/profile/entities/profile.entity";
 import { Tweet } from "src/tweets/entities/tweet.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
@@ -20,5 +21,8 @@ export class User {
 
     @OneToMany(()=>Tweet,(tweet)=>tweet.user)
     tweets:Tweet[];
+
+    @OneToMany(()=>Like,(like)=>like.user)
+    likes:Like[];
 
 }

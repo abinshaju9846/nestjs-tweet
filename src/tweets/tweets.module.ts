@@ -9,6 +9,7 @@ import { UsersModule } from 'src/users/users.module';
   imports:[TypeOrmModule.forFeature([Tweet]),UsersModule],
   controllers: [TweetsController],
   providers: [TweetsService],
+  exports: [TweetsService],
 
 })
 export class TweetsModule {}
