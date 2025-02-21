@@ -15,7 +15,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const userExists = await this.userRepository.findOne({ where: { email: createUserDto.email } })
     if (!userExists) {
-      const userData= this.userRepository.create({
+      const userData = this.userRepository.create({
         username: createUserDto.username,
         email: createUserDto.email,
         password: createUserDto.password
@@ -27,35 +27,40 @@ export class UsersService {
 
   }
 
-    findAll() {
-      return this.userRepository.find();
-    }
+  findAll() {
+    return this.userRepository.find();
+  }
 
-    findOne(id: number,) {
-      return this.userRepository.findOne({where:{id}});
+  async findOne(id: number,) {
+    const userExists = await this.userRepository.findOne({where:{id}});
+    if (!userExists) {
+      throw new ConflictException('User not found')
     }
+    return this.userRepository.findOne({ where: { id } });
+  }
 
-    async update(id: number, updateUserDto: UpdateUserDto) {
-      const userExists=await this.findOne(id);
-      if(!userExists) {
-        throw new ConflictException('User not found')
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const userExists = await this.findOne(id);
+    if (!userExists) {
+      throw new ConflictException('User not found')
     }
     const updatedUser = await this.userRepository.update(id, updateUserDto);
     return await this.findOne(id);
   }
 
-    async remove(id: number) {
-     const userExists=await this.findOne(id);
-      if(!userExists) {
-        throw new NotFoundException('User not found')
+  async remove(id: number) {
+    const userExists = await this.findOne(id);
+    if (!userExists) {
+      throw new NotFoundException('User not found')
     }
-    const deletes= await this.userRepository.delete(id);
-    if(deletes) {
+    const deletes = await this.userRepository.delete(id);
+    if (deletes) {
       return {
-        statuscode:HttpStatus.OK,
-        message: 'User deleted'}
-    
-}
-return "something wrong happened"
+        statuscode: HttpStatus.OK,
+        message: 'User deleted'
+      }
+
     }
+    return "something wrong happened"
+  }
 }

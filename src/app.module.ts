@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProfileModule } from './profile/profile.module';
+import { TweetsModule } from './tweets/tweets.module';
 
 @Module({
   imports: [TypeOrmModule.forRootAsync({
@@ -18,7 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         synchronize:true,
       }
     }
-  }),UsersModule],
+  }),UsersModule, ProfileModule, TweetsModule],
   controllers: [AppController],
   providers: [AppService],
 })
