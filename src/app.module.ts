@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProfileModule } from './profile/profile.module';
 import { TweetsModule } from './tweets/tweets.module';
+import { LikesModule } from './likes/likes.module';
 
 @Module({
   imports: [TypeOrmModule.forRootAsync({
@@ -20,7 +21,7 @@ import { TweetsModule } from './tweets/tweets.module';
         synchronize:true,
       }
     }
-  }),UsersModule, ProfileModule, TweetsModule],
+  }),UsersModule, ProfileModule, TweetsModule, LikesModule],
   controllers: [AppController],
   providers: [AppService],
 })

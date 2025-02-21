@@ -1,5 +1,6 @@
 import { Profile } from "src/profile/entities/profile.entity";
-import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Tweet } from "src/tweets/entities/tweet.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 export class User {
@@ -16,5 +17,8 @@ export class User {
 
     @OneToOne(()=>Profile,(profile)=>profile.user)
     profile:Profile;
+
+    @OneToMany(()=>Tweet,(tweet)=>tweet.user)
+    tweets:Tweet[];
 
 }
