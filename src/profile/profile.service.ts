@@ -2,7 +2,6 @@ import { ConflictException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { profile } from 'console';
 import { Repository } from 'typeorm';
 import { Profile } from './entities/profile.entity';
 import { UsersService } from 'src/users/users.service';
@@ -28,8 +27,8 @@ export class ProfileService {
       bio: createProfileDto.bio,
       avatar: createProfileDto.avatar
     })
-    const save= await this.profileRepository.save(createProfile);
-    return {...save,messaage:"profile creted"}
+    const save = await this.profileRepository.save(createProfile);
+    return { ...save, messaage: "profile creted" }
 
   }
 

@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Logindto } from './dto/login-user.dto';
+import { skip } from 'node:test';
 
 @Controller('users')
 export class UsersController {
@@ -13,8 +15,13 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query("skip",ParseIntPipe) skip:number,@Query("take",ParseIntPipe) take:number,) {
+    return this.usersService.findAll(skip,take);
+  }
+
+  @Post('login')
+  login(@Body()logindto: Logindto) {
+    return this.usersService.login(logindto);
   }
 
   @Get(':id')
