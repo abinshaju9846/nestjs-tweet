@@ -6,21 +6,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProfileModule } from './profile/profile.module';
 import { TweetsModule } from './tweets/tweets.module';
 import { LikesModule } from './likes/likes.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import  { typeOrmConfig } from './config/config.database';
 
 @Module({
-  imports: [TypeOrmModule.forRootAsync({
-    useFactory:()=>{
-      return{
-        type:'postgres',
-        host:'localhost',
-        port:5432,
-        username:'postgres',
-        password:'1234',
-        database:'tweet',
-        autoLoadEntities:true,
-        synchronize:true,
-      }
-    }
+  imports: [ConfigModule.forRoot({
+    isGlobal: true,
+    // load:[configDatabase]
+  }),
+  TypeOrmModule.forRootAsync({
+    imports:[ConfigModule],
+    inject:[ConfigService],
+    useFactory:async(ConfigService)=>typeOrmConfig(ConfigService)
   }),UsersModule, ProfileModule, TweetsModule, LikesModule],
   controllers: [AppController],
   providers: [AppService],
