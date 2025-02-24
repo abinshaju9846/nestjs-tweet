@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Profile } from './entities/profile.entity';
 import { UsersService } from 'src/users/users.service';
+import { join } from 'path';
+import { unlink } from 'fs';
 
 @Injectable()
 export class ProfileService {
@@ -14,7 +16,7 @@ export class ProfileService {
     private profileRepository: Repository<Profile>,
     private readonly userservice: UsersService,
   ) { }
-  async create(createProfileDto: CreateProfileDto) {
+  async create(createProfileDto: CreateProfileDto,avatar?:Express.Multer.File) {
     // console.log(createProfileDto.user_id);
     await this.userservice.findOne(createProfileDto.user_id)
 
@@ -22,10 +24,12 @@ export class ProfileService {
     if (profileExist) {
       throw new ConflictException('Profile already exist for this user')
     }
+
+    const avatarPath=avatar?`uploads/avatars/${avatar.filename}`:null
     const createProfile = await this.profileRepository.create({
       user_id: createProfileDto.user_id,
       bio: createProfileDto.bio,
-      avatar: createProfileDto.avatar
+      avatar:avatarPath,
     })
     const save = await this.profileRepository.save(createProfile);
     return { ...save, messaage: "profile creted" }
@@ -44,15 +48,27 @@ export class ProfileService {
     return profileExists;
   }
 
-  async update(id: number, updateProfileDto: UpdateProfileDto) {
-    await this.findOne(id)
-    await this.profileRepository.update(id, {
-      bio: updateProfileDto.bio,
-      avatar: updateProfileDto.avatar
-    });
-    return this.findOne(id)
+  public async update(
+    id: number,
+    updateProfileDto: UpdateProfileDto,
+    avatar?: Express.Multer.File, 
+  ) {
+    const profile = await this.profileRepository.findOne({ where: { id } });
+    if (!profile) {
+      throw new ConflictException(`Profile with id ${id} not found`);
+    }
 
+
+    const updatedData = {
+      ...updateProfileDto,
+      avatar: avatar ? `/uploads/avatars/${avatar.filename}` : profile.avatar, 
+    };
+
+
+    await this.profileRepository.update(id, updatedData);
+    return await this.profileRepository.findOne({ where: { id } });
   }
+
 
   async remove(id: number) {
     await this.findOne(id)

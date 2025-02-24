@@ -4,17 +4,17 @@ import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGenerate
 @Entity('profile')
 export class Profile {
     @PrimaryGeneratedColumn()
-    id:number;
+    id: number;
     @Column()
-    user_id:number;
-    @Column({type:'text',nullable:true})
-    bio:string;
-    @Column({nullable:true})
-    avatar:string;
-    @CreateDateColumn({type:'timestamp'})
+    user_id: number;
+    @Column({ type: 'text', nullable: true })
+    bio: string;
+    @Column({ type: 'varchar', nullable: true })
+    avatar: string | null;
+    @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;
 
-    @OneToOne(()=>User,(user)=>user.profile,{onDelete:'CASCADE',eager:true})
-    @JoinColumn({name:'user_id'})
-    user:User
+    @OneToOne(() => User, (user) => user.profile, { onDelete: 'CASCADE', eager: true })
+    @JoinColumn({ name: 'user_id' })
+    user: User
 }
