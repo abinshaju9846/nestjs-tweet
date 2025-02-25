@@ -6,12 +6,16 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Logindto } from './dto/login-user.dto';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private jwtService: JwtService,
+    private configService: ConfigService,
 
   ) { }
   async create(createUserDto: CreateUserDto) {
@@ -40,10 +44,20 @@ export class UsersService {
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials')
     }
+      // Create JWT payload
+      const payload = { 
+        email: user.email, 
+        sub: user.id,
+        username: user.username 
+      };
+      
+      // Generate JWT token
+      const token = this.jwtService.sign(payload)
     return {
       message: 'Logged in successfully',
       statusCode: HttpStatus.OK,
-      user: user
+      user: user,
+      token:token
     }
 
   }
@@ -87,4 +101,9 @@ export class UsersService {
     }
     return "something wrong happened"
   }
+
+
+
+
+  
 }
