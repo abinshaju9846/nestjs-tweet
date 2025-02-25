@@ -8,7 +8,7 @@ import { AuthGuard } from './user.guard';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -16,25 +16,29 @@ export class UsersController {
   }
   @UseGuards(AuthGuard)
   @Get()
-  findAll(@Query("skip",ParseIntPipe) skip:number,@Query("take",ParseIntPipe) take:number,) {
-    return this.usersService.findAll(skip,take);
+  findAll(@Query("skip", ParseIntPipe) skip: number, @Query("take", ParseIntPipe) take: number,) {
+    return this.usersService.findAll(skip, take);
   }
 
+  @UseGuards(AuthGuard)
   @Post('login')
-  login(@Body()logindto: Logindto) {
+  login(@Body() logindto: Logindto) {
     return this.usersService.login(logindto);
   }
- 
+
+  @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

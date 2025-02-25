@@ -21,7 +21,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const userExists = await this.userRepository.findOne({ where: { email: createUserDto.email } })
     if (!userExists) {
-      const hashedPassword=await bcrypt.hash(createUserDto.password,10)
+      const hashedPassword = await bcrypt.hash(createUserDto.password, 10)
       const userData = this.userRepository.create({
         username: createUserDto.username,
         email: createUserDto.email,
@@ -34,35 +34,35 @@ export class UsersService {
 
   }
 
-  async login(logindto:Logindto) {
+  async login(logindto: Logindto) {
 
-    const user =await this.userRepository.findOne({where: {email: logindto.email}})
+    const user = await this.userRepository.findOne({ where: { email: logindto.email } })
     if (!user) {
       throw new NotFoundException('User not found')
     }
-    const isMatch=await bcrypt.compare(logindto.password,user.password)
+    const isMatch = await bcrypt.compare(logindto.password, user.password)
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials')
     }
-      // Create JWT payload
-      const payload = { 
-        email: user.email, 
-        sub: user.id,
-        username: user.username 
-      };
-      
-      // Generate JWT token
-      const token = this.jwtService.sign(payload)
+    // Create JWT payload
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      username: user.username
+    };
+
+    // Generate JWT token
+    const token = this.jwtService.sign(payload)
     return {
       message: 'Logged in successfully',
       statusCode: HttpStatus.OK,
       user: user,
-      token:token
+      token: token
     }
 
   }
 
-  findAll(skip:number,take:number) {
+  findAll(skip: number, take: number) {
     return this.userRepository.find({
       skip,
       take
@@ -70,7 +70,7 @@ export class UsersService {
   }
 
   async findOne(id: number,) {
-    const userExists = await this.userRepository.findOne({where:{id}});
+    const userExists = await this.userRepository.findOne({ where: { id } });
     if (!userExists) {
       throw new ConflictException('User not found')
     }
@@ -101,9 +101,4 @@ export class UsersService {
     }
     return "something wrong happened"
   }
-
-
-
-
-  
 }

@@ -5,10 +5,11 @@ import { ProfileController } from './profile.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Profile } from './entities/profile.entity';
 import { UsersModule } from 'src/users/users.module';
+import { AuthGuard } from 'src/users/user.guard';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Profile]),UsersModule],  // Add the UsersModule here
   controllers: [ProfileController],
-  providers: [ProfileService],
+  providers: [ProfileService,AuthGuard],
 })
 export class ProfileModule {}

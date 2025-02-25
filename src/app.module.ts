@@ -7,7 +7,7 @@ import { ProfileModule } from './profile/profile.module';
 import { TweetsModule } from './tweets/tweets.module';
 import { LikesModule } from './likes/likes.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import  { typeOrmConfig } from './config/config.database';
+import { typeOrmConfig } from './config/config.database';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -15,11 +15,11 @@ import  { typeOrmConfig } from './config/config.database';
     // load:[configDatabase]
   }),
   TypeOrmModule.forRootAsync({
-    imports:[ConfigModule],
-    inject:[ConfigService],
-    useFactory:async(ConfigService)=>typeOrmConfig(ConfigService)
-  }),UsersModule, ProfileModule, TweetsModule, LikesModule],
+    imports: [ConfigModule],
+    inject: [ConfigService],
+    useFactory: async (ConfigService) => typeOrmConfig(ConfigService)
+  }), UsersModule, ProfileModule, TweetsModule, LikesModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
