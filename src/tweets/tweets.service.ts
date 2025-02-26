@@ -10,49 +10,83 @@ import { UsersService } from 'src/users/users.service';
 export class TweetsService {
   constructor(
     @InjectRepository(Tweet)
-    private readonly tweetRepository: Repository<Tweet>,
-    private userservice: UsersService,
+    private readonly tweetRepository: Repository<Tweet>, 
+    private userservice: UsersService, 
   ) { }
-  async create(createTweetDto: CreateTweetDto) {
-    await this.userservice.findOne(createTweetDto.user_id)
-    const tweets = await this.tweetRepository.create({
-      user_id: createTweetDto.user_id,
-      content: createTweetDto.content,
-    })
-    const save = await this.tweetRepository.save(tweets)
-    return { ...save, message: "tweet created" }
+
+  // Method to create a new tweet
+  async create(createTweetDto: CreateTweetDto,id:number) {
+    // Verify that the user exists before creating a tweet
+    await this.userservice.findOne(id);
+    console.log("id from tweet",id);
+    
+    // Create a new tweet instance with the provided user ID and content
+    const tweet = this.tweetRepository.create({user_id:id,
+      content: createTweetDto.content,});
+
+    // Save the new tweet to the database
+    const savedTweet = await this.tweetRepository.save(tweet);
+
+    // Return the saved tweet along with a success message
+    return { ...savedTweet, message: 'Tweet created' };
   }
 
+  // Method to retrieve all tweets
   async findAll() {
+    // Fetch all tweets from the database
     return await this.tweetRepository.find();
   }
 
+  // Method to retrieve a single tweet by its ID
   async findOne(id: number) {
-    const tweet = await this.tweetRepository.findOne({
-      where: { id }
-    })
+    // Attempt to find the tweet with the given ID
+    const tweet = await this.tweetRepository.find({ where: {user_id: id } });
+
+    // If the tweet is not found, throw a ConflictException
     if (!tweet) {
-      throw new ConflictException(`Tweet with id ${id} not found`)
+      throw new ConflictException(`Tweet with id ${id} not found`);
     }
+
+    // Return the found tweet
     return tweet;
   }
 
+  // Method to update an existing tweet
   async update(id: number, updateTweetDto: UpdateTweetDto) {
-    await this.findOne(id)
-    const updatedTweet = await this.tweetRepository.update(id, { content: updateTweetDto.content })
-    if (!updatedTweet.affected) {
-      throw new ConflictException(`Tweet with id ${id} not affected`)
+    // Ensure the tweet exists before attempting an update
+    await this.findOne(id);
+
+    // Update the tweet's content
+    const updateResult = await this.tweetRepository.update(id, {
+      content: updateTweetDto.content,
+    });
+
+    // If no rows were affected, throw a ConflictException
+    if (!updateResult.affected) {
+      throw new ConflictException(`Tweet with id ${id} not updated`);
     }
-    const updated = await this.findOne(id)
-    return { ...updated, message: "Tweet updated" }
+
+    // Retrieve the updated tweet
+    const updatedTweet = await this.findOne(id);
+
+    // Return the updated tweet along with a success message
+    return { ...updatedTweet, message: 'Tweet updated' };
   }
 
+  // Method to delete a tweet by its ID
   async remove(id: number) {
-    await this.findOne(id)
-    const deleteTweet = await this.tweetRepository.delete(id)
-    if (!deleteTweet.affected) {
-      throw new ConflictException(`Tweet with id ${id} not deleted`)
+    // Ensure the tweet exists before attempting deletion
+    await this.findOne(id);
+
+    // Delete the tweet from the database
+    const deleteResult = await this.tweetRepository.delete(id);
+
+    // If no rows were affected, throw a ConflictException
+    if (!deleteResult.affected) {
+      throw new ConflictException(`Tweet with id ${id} not deleted`);
     }
-    return { message: "Tweet deleted" }
+
+    // Return a success message upon successful deletion
+    return { message: 'Tweet deleted' };
   }
 }

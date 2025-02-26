@@ -1,15 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { LikesService } from './likes.service';
 import { CreateLikeDto } from './dto/create-like.dto';
 import { UpdateLikeDto } from './dto/update-like.dto';
-
+import { GetUserId } from 'src/decorators/user.decorator';
+import { AuthGuard } from 'src/users/user.guard';
+@UseGuards(AuthGuard)
 @Controller('likes')
 export class LikesController {
   constructor(private readonly likesService: LikesService) { }
 
   @Post()
-  create(@Body() createLikeDto: CreateLikeDto) {
-    return this.likesService.create(createLikeDto);
+  create(@GetUserId()id:number,@Body() createLikeDto: CreateLikeDto) {
+    return this.likesService.create(id,createLikeDto);
   }
 
   @Get()

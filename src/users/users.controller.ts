@@ -20,7 +20,7 @@ export class UsersController {
     return this.usersService.findAll(skip, take);
   }
 
-  @UseGuards(AuthGuard)
+
   @Post('login')
   login(@Body() logindto: Logindto) {
     return this.usersService.login(logindto);

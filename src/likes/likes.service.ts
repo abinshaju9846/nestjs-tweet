@@ -14,11 +14,11 @@ export class LikesService {
     private readonly tweetService: TweetsService,
     private userservice: UsersService,
   ) { }
-  async create(createLikeDto: CreateLikeDto) {
+  async create(id:number,createLikeDto: CreateLikeDto) {
     await this.tweetService.findOne(createLikeDto.tweet_id)
-    await this.userservice.findOne(createLikeDto.user_id)
+    await this.userservice.findOne(id)
     const like = this.likeRepository.create({
-      user_id: createLikeDto.user_id,
+      user_id: id,
       tweet_id: createLikeDto.tweet_id
     });
     return await this.likeRepository.save(like);
