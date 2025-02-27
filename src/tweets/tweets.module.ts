@@ -4,12 +4,12 @@ import { TweetsController } from './tweets.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Tweet } from './entities/tweet.entity';
 import { UsersModule } from 'src/users/users.module';
-import { AuthGuard } from 'src/users/user.guard';
+
 
 @Module({
   imports:[TypeOrmModule.forFeature([Tweet]),UsersModule],
   controllers: [TweetsController],
-  providers: [TweetsService,AuthGuard],
+  providers: [TweetsService],
   exports: [TweetsService],
 
 })

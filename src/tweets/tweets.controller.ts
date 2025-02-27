@@ -2,10 +2,14 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { TweetsService } from './tweets.service';
 import { CreateTweetDto } from './dto/create-tweet.dto';
 import { UpdateTweetDto } from './dto/update-tweet.dto';
-import { AuthGuard } from 'src/users/user.guard';
 import { GetUserId } from 'src/decorators/user.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
-@UseGuards(AuthGuard)
+import { Roles } from 'src/decorators/roles.decrator';
+import { RolesGuard } from 'src/auth/guards/role,gaurd';
+
+@UseGuards(JwtAuthGuard,RolesGuard)
+@Roles('user')
 @Controller('tweets')
 export class TweetsController {
   constructor(private readonly tweetsService: TweetsService) {}

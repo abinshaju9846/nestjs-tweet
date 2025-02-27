@@ -9,6 +9,7 @@ import { LikesModule } from './likes/likes.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { typeOrmConfig } from './config/config.database';
 import { RoleModule } from './role/role.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -19,7 +20,7 @@ import { RoleModule } from './role/role.module';
     imports: [ConfigModule],
     inject: [ConfigService],
     useFactory: async (ConfigService) => typeOrmConfig(ConfigService)
-  }), UsersModule, ProfileModule, TweetsModule, LikesModule, RoleModule],
+  }), UsersModule, ProfileModule, TweetsModule, LikesModule, RoleModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -38,40 +38,6 @@ export class UsersService {
     return await this.userRepository.save(userData);
   }
 
-
-  async login(logindto: Logindto) {
-    // Attempt to find the user in the database by their email address
-    const user = await this.userRepository.findOne({ where: { email: logindto.email } });
-    // If the user is not found, throw a NotFoundException
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    // Compare the provided password with the hashed password stored in the database
-    const isMatch = await bcrypt.compare(logindto.password, user.password);
-    // If the passwords do not match, throw an UnauthorizedException
-    if (!isMatch) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-    // Create a payload for the JWT containing user-specific information
-    const payload = {
-      email: user.email,   // User's email address
-      user_id: user.id,        // User's unique identifier (subject)
-      username: user.username,
-      role_id:user.role_id// User's username
-    };
-    // Generate a JWT token using the payload
-    const token = this.jwtService.sign(payload);
-    // Return a response object containing a success message, status code, user details, and the generated token
-    return {
-      message: 'Logged in successfully',
-      statusCode: HttpStatus.OK,
-      user: user,
-      token: token
-    };
-  }
-
-
-
   // Fetch multiple users with pagination
   findAll(skip: number, take: number) {
     // Fetch users from the repository with pagination parameters

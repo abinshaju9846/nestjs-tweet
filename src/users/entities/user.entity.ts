@@ -28,8 +28,8 @@ export class User {
     @OneToMany(()=>Like,(like)=>like.user)
     likes:Like[];
 
-    @ManyToOne(()=>Role,(role)=>role.id)
+    @ManyToOne(()=>Role,(role)=>role.id,{eager:true})
     @JoinColumn({name:'role_id',})
-    role: Role[]
+    role: Role
 
 }
