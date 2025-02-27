@@ -8,6 +8,7 @@ import { TweetsModule } from './tweets/tweets.module';
 import { LikesModule } from './likes/likes.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { typeOrmConfig } from './config/config.database';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
@@ -18,7 +19,7 @@ import { typeOrmConfig } from './config/config.database';
     imports: [ConfigModule],
     inject: [ConfigService],
     useFactory: async (ConfigService) => typeOrmConfig(ConfigService)
-  }), UsersModule, ProfileModule, TweetsModule, LikesModule],
+  }), UsersModule, ProfileModule, TweetsModule, LikesModule, RoleModule],
   controllers: [AppController],
   providers: [AppService],
 })

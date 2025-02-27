@@ -1,7 +1,8 @@
 import { Like } from "src/likes/entities/like.entity";
 import { Profile } from "src/profile/entities/profile.entity";
+import { Role } from "src/role/entities/role.entity";
 import { Tweet } from "src/tweets/entities/tweet.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 export class User {
@@ -13,6 +14,8 @@ export class User {
     email: string;
     @Column()
     password: string;
+    @Column()
+    role_id:number
     @CreateDateColumn({type:'timestamp'})
     createdAt: Date;
 
@@ -24,5 +27,9 @@ export class User {
 
     @OneToMany(()=>Like,(like)=>like.user)
     likes:Like[];
+
+    @ManyToOne(()=>Role,(role)=>role.id)
+    @JoinColumn({name:'role_id',})
+    role: Role[]
 
 }

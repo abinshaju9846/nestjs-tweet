@@ -6,10 +6,11 @@ import { Logindto } from './dto/login-user.dto';
 import { skip } from 'node:test';
 import { AuthGuard } from './user.guard';
 
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
-
+  
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);

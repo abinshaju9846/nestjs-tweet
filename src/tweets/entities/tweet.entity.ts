@@ -1,3 +1,4 @@
+import { Role } from "src/role/entities/role.entity";
 import { User } from "src/users/entities/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -18,4 +19,6 @@ export class Tweet {
     @ManyToOne(()=>User,(user)=>user.tweets,{onDelete:'CASCADE',eager:true})
     @JoinColumn({name:'user_id'})
    user: User[]
+
+ 
 }

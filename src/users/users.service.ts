@@ -32,6 +32,7 @@ export class UsersService {
       username: createUserDto.username,
       email: createUserDto.email,
       password: hashedPassword,
+      role_id: createUserDto.role_id,
     });
     // Save the new user entity to the database and return the result
     return await this.userRepository.save(userData);
@@ -55,7 +56,8 @@ export class UsersService {
     const payload = {
       email: user.email,   // User's email address
       user_id: user.id,        // User's unique identifier (subject)
-      username: user.username // User's username
+      username: user.username,
+      role_id:user.role_id// User's username
     };
     // Generate a JWT token using the payload
     const token = this.jwtService.sign(payload);

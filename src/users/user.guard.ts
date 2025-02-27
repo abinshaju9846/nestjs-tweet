@@ -31,6 +31,8 @@ import { ConfigService } from '@nestjs/config';
         );
         // 💡 We're assigning the payload to the request object here
         // so that we can access it in our route handlers
+        console.log(payload);
+        
         request['user'] = payload;
       } catch {
         throw new UnauthorizedException();

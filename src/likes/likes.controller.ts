@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { LikesService } from './likes.service';
 import { CreateLikeDto } from './dto/create-like.dto';
-import { UpdateLikeDto } from './dto/update-like.dto';
 import { GetUserId } from 'src/decorators/user.decorator';
 import { AuthGuard } from 'src/users/user.guard';
 @UseGuards(AuthGuard)
