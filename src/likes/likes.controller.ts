@@ -9,20 +9,17 @@ import { RolesGuard } from 'src/auth/guards/role,gaurd';
 @Controller('likes')
 export class LikesController {
   constructor(private readonly likesService: LikesService) { }
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@GetUserId() id: number, @Body() createLikeDto: CreateLikeDto) {
     return this.likesService.create(id, createLikeDto);
   }
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.likesService.findAll();
   }
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.likesService.findOne(+id);
@@ -32,8 +29,7 @@ export class LikesController {
   // update(@Param('id') id: string, @Body() updateLikeDto: UpdateLikeDto) {
   //   return this.likesService.update(+id, updateLikeDto);
   // }
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.likesService.remove(+id);

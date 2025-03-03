@@ -14,35 +14,30 @@ import { RolesGuard } from 'src/auth/guards/role,gaurd';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
-  @UseGuards(JwtAuthGuard,RolesGuard)
-  @Roles('user')
+  // @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
-  @UseGuards(JwtAuthGuard,RolesGuard)
-  @Roles('')
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Query("skip", ParseIntPipe) skip: number, @Query("take", ParseIntPipe) take: number,) {
     return this.usersService.findAll(skip, take);
   }
 
-  @UseGuards(JwtAuthGuard,RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
 
-  @UseGuards(JwtAuthGuard,RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
-  @UseGuards(JwtAuthGuard,RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

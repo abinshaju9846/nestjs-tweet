@@ -14,8 +14,7 @@ import { RolesGuard } from 'src/auth/guards/role,gaurd';
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) { }
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('avatar', multerConfig))
   async create(
@@ -31,27 +30,23 @@ export class ProfileController {
       avatar: avatar ? avatar.path : null,
     });
   }
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.profileService.findAll();
   }
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Get('ById')
   findOne(@GetUserId() id) {
     return this.profileService.findOne(id);
   }
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Patch()
   @UseInterceptors(FileInterceptor('avatar', multerConfig))
   update(@GetUserId() id, @Body() updateProfileDto: UpdateProfileDto, @UploadedFile() avatar: Express.Multer.File) {
     return this.profileService.update(+id, updateProfileDto, avatar);
   }
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('user')
+  @UseGuards(JwtAuthGuard)
   @Delete()
   remove(@GetUserId() id: number) {
     return this.profileService.remove(+id);

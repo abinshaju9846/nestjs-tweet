@@ -8,8 +8,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Roles } from 'src/decorators/roles.decrator';
 import { RolesGuard } from 'src/auth/guards/role,gaurd';
 
-@UseGuards(JwtAuthGuard,RolesGuard)
-@Roles('user')
+@UseGuards(JwtAuthGuard)
 @Controller('tweets')
 export class TweetsController {
   constructor(private readonly tweetsService: TweetsService) {}

@@ -13,13 +13,13 @@ export class RoleController {
 
   ) { }
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles('Admin')
   @Post()
   create(@Body() createRoleDto: CreateRoleDto) {
     return this.roleService.create(createRoleDto);
   }
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles('Admin')
   @Get()
   findAll() {
     return this.roleService.findAll();
@@ -31,13 +31,13 @@ export class RoleController {
   // }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles('Admin')
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateRoleDto: UpdateRoleDto) {
     return this.roleService.update(id, updateRoleDto);
   }
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles('Admin')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.roleService.remove(+id);
